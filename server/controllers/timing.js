@@ -58,9 +58,11 @@ class Timing {
     if (hasEmptyFields([start, end, id])) return res.status(400).send({
       message: 'Start/End time and car id cannot be empty'
     })
-    if (![start, end].some(isIsoString)) return res.status(400).send({
-      message: 'Invalid datetime format'
-    })
+    for (const time of [start, end]) {
+      if (!isIsoString(time)) return res.status(400).send({
+        message: 'Invalid datetime format'
+      })
+    }
     try {
       const updated = await timings.update({
         start,
