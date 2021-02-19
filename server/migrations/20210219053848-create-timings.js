@@ -13,6 +13,9 @@ module.exports = {
       end: {
         type: Sequelize.STRING
       },
+      available: {
+        type: Sequelize.BOOLEAN
+      },
       carId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
