@@ -1,4 +1,3 @@
-import { verifyToken } from '../controllers/auth'
 import Users from '../controllers/user'
 
 export default (app) => {

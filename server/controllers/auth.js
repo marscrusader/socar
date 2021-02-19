@@ -7,10 +7,16 @@ export const verifyToken = (req, res, next) => {
     message: 'No token provided.'
   })
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
-    if (err) return res.status(500).send({
-      auth: false,
-      message: 'Failed to authenticate token.'
-    })
+    if (err) {
+      let message = 'Failed to authenticate token.'
+      if (err.message == 'jwt expired') {
+        message = 'Token expired'
+      }
+      return res.status(500).send({
+        auth: false,
+        message
+      })
+    }
     req.userId = decoded.id
     next()
   })
