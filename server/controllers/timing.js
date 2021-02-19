@@ -54,7 +54,7 @@ class Timing {
   }
 
   static async update(req, res) {
-    const { start, end, id } = req.body
+    const { start, end, id, carId } = req.body
     if (hasEmptyFields([start, end, id])) return res.status(400).send({
       message: 'Start/End time and car id cannot be empty'
     })
@@ -67,8 +67,12 @@ class Timing {
         end
       }, {
         where: {
-          id
+          id,
+          carId
         }
+      })
+      if (updated[0] === 0) return res.status(404).send({
+        message: 'Availability time does not exists'
       })
       return res.status(200).send({
         message: 'Availabily times updated'
