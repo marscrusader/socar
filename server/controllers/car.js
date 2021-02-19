@@ -1,4 +1,5 @@
 import Model from '../models'
+import { hasEmptyFields } from '../utils/checkEmptyFields'
 
 const { car } = Model
 
@@ -59,6 +60,9 @@ class Cars {
 
   static async create(req, res) {
     const { brand, model } = req.body
+    if (hasEmptyFields([brand, model])) return res.status(400).send({
+      message: 'Brand or model is missing'
+    })
     const { userId } = req
     try {
       await car.create({
@@ -79,3 +83,28 @@ class Cars {
 }
 
 export default Cars
+
+export const verifyCarBelongsToUser = async (req, res, next) => {
+  const { carId } = req.body
+  if (!carId) return res.status(400).send({
+    message: 'Car id missing'
+  })
+  const userId = req.userId
+  try {
+    const resp = await car.findOne({
+      where: {
+        id: carId
+      },
+      attributes: ['userId']
+    })
+    if (!(resp.userId === userId)) return res.status(401).send({
+      message: 'Car does not belong to user'
+    })
+    return next()
+  } catch (error) {
+    console.log('Failed to verify if car belongs to user', error)
+    return res.status(500).send({
+      message: 'Failed to verify if car belongs to user'
+    })
+  }
+}

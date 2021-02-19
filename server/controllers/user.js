@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import model from '../models'
-import { checkEmptyFields } from '../utils/checkEmptyFields'
+import Model from '../models'
+import { hasEmptyFields } from '../utils/checkEmptyFields'
 
-const { user } = model
+const { user } = Model
 const secretKey = process.env.SECRET
 
 class Users {
   static async register(req, res) {
     const { username, password } = req.body
-    if (checkEmptyFields([username, password])) return res.status(400).send({
+    if (hasEmptyFields([username, password])) return res.status(400).send({
       auth: false,
       message: 'Username or password cannot be empty'
     })
@@ -45,7 +45,7 @@ class Users {
 
   static async login(req, res) {
     const { username, password } = req.body
-    if (checkEmptyFields([username, password])) return res.status(400).send({
+    if (hasEmptyFields([username, password])) return res.status(400).send({
       auth: false,
       message: 'Username or password cannot be empty'
     })

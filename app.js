@@ -4,6 +4,7 @@ import logger from 'morgan'
 import bodyParser from 'body-parser'
 import userRoutes from './server/routes/user'
 import carRoutes from './server/routes/car'
+import timingRoutes from './server/routes/timing'
 
 const port = 3000
 const app = express() // setup express application
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // routes
 userRoutes(app)
 carRoutes(app)
+timingRoutes(app)
 
 app.get('*', (req, res) => res.status(200).send({
   message: 'Welcome to the default API route',
