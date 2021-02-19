@@ -28,7 +28,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: [],
+        attributes: ['id', 'start', 'end', 'available'],
         where: {
           start: {
             [Op.gte]: start
@@ -43,7 +43,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: [],
+        attributes: ['id', 'start', 'end', 'available'],
         where: {
           end: {
             [Op.lte]: end
@@ -60,7 +60,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: [],
+        attributes: ['id', 'start', 'end', 'available'],
         where: {
           start: {
             [Op.gte]: start
@@ -78,7 +78,7 @@ export default class Cars {
         query['include'] = [{
           model: timings,
           required: true,
-          attributes: [],
+          attributes: ['id', 'start', 'end', 'available'],
           where: {
             available
           }
@@ -111,7 +111,12 @@ export default class Cars {
           'id',
           'brand',
           'model'
-        ]
+        ],
+        include: [{
+          model: timings,
+          required: false,
+          attributes: ['id', 'start', 'end', 'available']
+        }]
       })
       if (!result) return res.status(404).send({
         message: 'car not found'
