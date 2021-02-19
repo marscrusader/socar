@@ -32,6 +32,14 @@ A car can have many availability times.
 
 A timing can only belong to one car.
 
+**NOTE**: The start and end date/time in this project must be in the format of Javascript's default ISO string 
+
+YYYY-MM-DDTHH:MN:SS.MSSZ, i.e.
+```
+const dt = new Date()
+dt.toISOString()
+```
+
 ## APIs
 **User**
 - POST `/api/user/register`, request body:
