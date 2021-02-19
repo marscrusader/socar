@@ -4,7 +4,7 @@ import { isIsoString } from '../utils/checkIsoString'
 
 const { timings } = Model
 
-class Timing {
+export default class Timing {
   static async list(req, res) {
     const carId = req.params.carId
     if (!carId) return res.status(400).send({
@@ -15,7 +15,7 @@ class Timing {
         where: {
           carId
         },
-        attributes: ['id', 'start', 'end']
+        attributes: ['id', 'start', 'end', 'available']
       })
       return res.status(200).send({
         availability
@@ -29,7 +29,7 @@ class Timing {
   }
 
   static async create(req, res) {
-    const { start, end, carId } = req.body
+    const { start, end, carId, available } = req.body
     if (hasEmptyFields([start, end, carId])) return res.status(400).send({
       message: 'Start/End time and car id cannot be empty'
     })
@@ -40,6 +40,8 @@ class Timing {
       await timings.create({
         start,
         end,
+        // set true by default
+        available: available === undefined ? true : false,
         carId
       })
       return res.status(201).send({
@@ -54,9 +56,9 @@ class Timing {
   }
 
   static async update(req, res) {
-    const { start, end, id, carId } = req.body
-    if (hasEmptyFields([start, end, id])) return res.status(400).send({
-      message: 'Start/End time and car id cannot be empty'
+    const { start, end, id, carId, available } = req.body
+    if (hasEmptyFields([start, end, id, available])) return res.status(400).send({
+      message: 'Start/End time, available and car id cannot be empty'
     })
     for (const time of [start, end]) {
       if (!isIsoString(time)) return res.status(400).send({
@@ -66,7 +68,8 @@ class Timing {
     try {
       const updated = await timings.update({
         start,
-        end
+        end,
+        available
       }, {
         where: {
           id,
@@ -87,5 +90,3 @@ class Timing {
     }
   }
 }
-
-export default Timing
