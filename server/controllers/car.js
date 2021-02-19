@@ -1,23 +1,92 @@
+import { Op } from 'sequelize'
 import Model from '../models'
 import { hasEmptyFields } from '../utils/checkEmptyFields'
+import { isIsoString } from '../utils/checkIsoString'
 
-const { car } = Model
+const { car, timings } = Model
 
-class Cars {
+export default class Cars {
   static async list(req, res) {
     // remember we set the userId when verifying jwt token
     const { userId } = req
-    try {
-      const cars = await car.findAll({
-        where: {
-          userId
-        },
-        attributes: [
-          'id',
-          'brand',
-          'model'
-        ]
+    const { start, end, available } = req.query
+    const query = {
+      where: {
+        userId
+      },
+      attributes: [
+        'id',
+        'brand',
+        'model'
+      ]
+    }
+    if (start && !end) {
+      if (!isIsoString(start)) return res.status(400).send({
+        message: 'Invalid datetime format'
       })
+      // only get those that are starting from "start"
+      query['include'] = [{
+        model: timings,
+        required: true,
+        attributes: ['id', 'start', 'end'],
+        where: {
+          start: {
+            [Op.gte]: start
+          }
+        }
+      }]
+    } else if (!start && end) {
+      if (!isIsoString(end)) return res.status(400).send({
+        message: 'Invalid datetime format'
+      })
+      // only get those that are ending on or before "end"
+      query['include'] = [{
+        model: timings,
+        required: true,
+        attributes: ['id', 'start', 'end'],
+        where: {
+          end: {
+            [Op.lte]: end
+          }
+        }
+      }]
+    } else if (start && end) {
+      for (const time of [start, end]) {
+        if (!isIsoString(time)) return res.status(400).send({
+          message: 'Invalid datetime format'
+        })
+      }
+      // only get those that are within "start" and "end"
+      query['include'] = [{
+        model: timings,
+        required: true,
+        attributes: ['id', 'start', 'end'],
+        where: {
+          start: {
+            [Op.gte]: start
+          },
+          end: {
+            [Op.lte]: end
+          }
+        }
+      }]
+    }
+    if (available !== undefined) {
+      if (query.hasOwnProperty('include')) {
+        query['include'][0]['where']['available'] = available
+      } else {
+        query['include'] = [{
+          model: timings,
+          required: true,
+          attributes: ['id', 'start', 'end'],
+          where: {
+            available
+          }
+        }]
+      }
+    }
+    try {
+      const cars = await car.findAll(query)
       return res.status(200).send({
         cars
       })
@@ -82,14 +151,15 @@ class Cars {
   }
 }
 
-export default Cars
-
 export const verifyCarBelongsToUser = async (req, res, next) => {
   const { carId } = req.body
   if (!carId) return res.status(400).send({
     message: 'Car id missing'
   })
   const userId = req.userId
+  if (!userId) return res.status(400).send({
+    message: 'User id is missing'
+  })
   try {
     const resp = await car.findOne({
       where: {
