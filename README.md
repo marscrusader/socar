@@ -30,7 +30,7 @@ A car can only have one user owner.
 
 A car can have many availability times.
 
-A timing can only belong to on car.
+A timing can only belong to one car.
 
 ## APIs
 **User**
