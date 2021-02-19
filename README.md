@@ -14,8 +14,11 @@ ORM: **Sequelize**
 ## Deployment
 Deployed on Heroku, `https://socar-sample-api.herokuapp.com`. Please understand that the first request will take some time to load as I'm on a free Heroku tier.
 
+## Postman collection
+https://www.getpostman.com/collections/47297182135564240d7f
+
 ## Authentication
-The requirements from the task is quite vague on this, there is an endpoint to register a user, and another endpoint to login. There is also a "fake" logout api. When the user registers/login, a jwt token is issued to them with a 1 hour expiry duration, the token is required to access other APIs.
+The requirements from the task is quite vague on this. The final implementation consists of an endpoint to register a user and another endpoint to login, there is also a "fake" logout api. When the user registers/login, a jwt token is issued to them with a 1 hour expiry duration, the token is required to access other APIs.
 
 ## Models
 **User**: id, username, password, updatedAt, createdAt
