@@ -44,11 +44,11 @@ class Cars {
           'model'
         ]
       })
-      if (!result) return res.status(200).send({
+      if (!result) return res.status(404).send({
         message: 'car not found'
       })
       return res.status(200).send({
-        result
+        car: result
       })
     } catch (findError) {
       console.log('Failed to find car belonging to user', findError)
