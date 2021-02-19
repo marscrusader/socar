@@ -28,7 +28,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: ['id', 'start', 'end'],
+        attributes: [],
         where: {
           start: {
             [Op.gte]: start
@@ -43,7 +43,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: ['id', 'start', 'end'],
+        attributes: [],
         where: {
           end: {
             [Op.lte]: end
@@ -60,7 +60,7 @@ export default class Cars {
       query['include'] = [{
         model: timings,
         required: true,
-        attributes: ['id', 'start', 'end'],
+        attributes: [],
         where: {
           start: {
             [Op.gte]: start
@@ -78,7 +78,7 @@ export default class Cars {
         query['include'] = [{
           model: timings,
           required: true,
-          attributes: ['id', 'start', 'end'],
+          attributes: [],
           where: {
             available
           }
