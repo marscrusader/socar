@@ -12,7 +12,7 @@ ORM: **Sequelize**
 2. `npm run dev`
 
 ## Deployment
-Deployed on Heroku, `https://socar-sample-api.herokuapp.com`
+Deployed on Heroku, `https://socar-sample-api.herokuapp.com`. Please understand that the first request will take some time to load as I'm on a free Heroku tier.
 
 ## Authentication
 The requirements from the task is quite vague on this, there is an endpoint to register a user, and another endpoint to login. There is also a "fake" logout api. When the user registers/login, a jwt token is issued to them with a 1 hour expiry duration, the token is required to access other APIs.
