@@ -6,7 +6,7 @@ import { hasEmptyFields } from '../utils/checkEmptyFields'
 const { user } = Model
 const secretKey = process.env.SECRET
 
-class Users {
+export default class Users {
   static async register(req, res) {
     const { username, password } = req.body
     if (hasEmptyFields([username, password])) return res.status(400).send({
@@ -101,5 +101,3 @@ class Users {
     })
   }
 }
-
-export default Users
