@@ -14,6 +14,13 @@ export const Time = (sequelize, DataTypes) => {
         msg: 'Please enter end time'
       }
     },
+    available: {
+      type: DataTypes.BOOLEAN,
+      allowNull: {
+        args: false,
+        msg: 'Please indicate if is available'
+      }
+    },
     carId: {
       type: DataTypes.INTEGER,
       references: {
