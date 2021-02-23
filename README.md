@@ -44,6 +44,8 @@ dt.toISOString()
 ```
 
 ## APIs
+All `POST` request for car and timing API needs to have `x-access-token` header, you can get the token from login/register API.
+
 **User**
 - POST `/api/user/register`, request body:
   - username
